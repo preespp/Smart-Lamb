@@ -20,11 +20,11 @@ float duration, distance;
 
 // for multi-tread
 unsigned long previousTimeNeoPixel= millis();
-const long timeIntervalNeoPixel= 100; //checking Neo Pixel Color every 0.1 sec
+const long timeIntervalNeoPixel= 500; //checking Neo Pixel Color every 0.1 sec
 unsigned long previousTimelcd= millis();
 unsigned long previousTimetemp= millis();
 unsigned long previousTimesensor= millis();
-const long timeInterval= 100;
+const long timeInterval= 1000;
 
 int redColor = 0;
 int greenColor = 0;
@@ -76,22 +76,25 @@ void loop(){
     
   	previousTimesensor = currentTime;
     
-      // need to get color from temperature at the same time
-    if (temperatureF > 100) {
+    // need to get color from temperature at the same time
+    if (temperatureF > 85) {
+    // light blue to make users feel cooler in the hot atmosphere
       
     redColor = 17 ;
     greenColor = 21 ;
     blueColor = 23;
     }
     
-    if (temperatureF > 80 && temperatureF <= 100 ) {
-      
+    if (temperatureF > 55 && temperatureF <= 85 ) {
+    
+    // warm white in warm weather
     redColor = 24 ;
     greenColor = 24;
     blueColor = 24;
     }
     
-    if (temperatureF <= 80 ) {
+    if (temperatureF <= 55 ) {
+    // red tone in the cold weather
       
     redColor = 25;
     greenColor = 16;
@@ -162,12 +165,15 @@ float temp_en(int reading){
   
   voltage /= 1024.0; 
   
-  float temperatureC = (voltage - 0.5) * 100 ;
+  float temperatureC = (voltage - 0.5) * 50 ; // test tmp36 with actual room tempeture and adjust equation
+  // to make it relevant with room temperature (recommended to use more accurate sensor)
   
   float temperatureF = (temperatureC * 9.0 / 5.0) + 32.0;
   
   Serial.print(temperatureF); 
   Serial.println(" degrees F");
+  Serial.print(temperatureC); 
+  Serial.println(" degrees C");
   
   return temperatureF;
 }
