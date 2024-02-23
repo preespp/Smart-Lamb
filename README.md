@@ -1,2 +1,2 @@
 # Smart-Lamb
-The project for Lutron Light Competition, Boston University
+The project for Lutron Lighting Innovation Competition, Boston University
