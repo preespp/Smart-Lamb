@@ -77,25 +77,25 @@ void loop(){
   	previousTimesensor = currentTime;
     
       // need to get color from temperature at the same time
-    if (temperatureF > 70) {
+    if (temperatureF > 100) {
       
-    redColor = 2 ;
-    greenColor = 5 ;
-    blueColor = 3;
+    redColor = 17 ;
+    greenColor = 21 ;
+    blueColor = 23;
     }
     
-    if (temperatureF > 60 && temperatureF <= 70 ) {
+    if (temperatureF > 80 && temperatureF <= 100 ) {
       
-    redColor = 5 ;
-    greenColor = 2;
-    blueColor = 3;
+    redColor = 24 ;
+    greenColor = 24;
+    blueColor = 24;
     }
     
-    if (temperatureF < 60 ) {
+    if (temperatureF <= 80 ) {
       
-    redColor = 3;
-    greenColor = 2;
-    blueColor = 5;
+    redColor = 25;
+    greenColor = 16;
+    blueColor = 12;
     }
     
     length = dis_sensor(redColor,greenColor,blueColor);
@@ -117,6 +117,8 @@ void loop(){
     //print temperature
     lcd.setCursor(0,0);
     lcd.print("Temperature=");
+    lcd.setCursor(12,0);
+    lcd.print("   ");
     lcd.setCursor(12,0);
     lcd.print(temperatureF);
     lcd.setCursor(15,0);
@@ -219,8 +221,9 @@ long readUltrasonicDistance(int triggerPin, int echoPin){
 
 int dis_sensor(int redColor,int greenColor,int blueColor)
 {
-  // set threshold distance to activate LEDs
-  distanceThreshold = 265;
+  // set threshold distance to activate neopixel
+  // changable + I set it low for the convinence of demonstration 
+  distanceThreshold = 82;
   
   // measure the ping time in cm
   long duration = readUltrasonicDistance(trigPin, echoPin);
@@ -235,50 +238,51 @@ int dis_sensor(int redColor,int greenColor,int blueColor)
   Serial.println("in");
 
   // condition for setting different levels of brightness
+  // feel free to change distance or uncomment any condition
   if (cm > distanceThreshold) {
     setColor(redColor*0,redColor*0,redColor*0);
   }
-  if (cm <= distanceThreshold && cm > distanceThreshold - 20) {
+  if (cm <= distanceThreshold && cm > distanceThreshold - 7) {
 	  setColor(redColor*1,greenColor*1,blueColor*1);
   }
-  if (cm <= distanceThreshold - 20 && cm > distanceThreshold - 40) {
+  if (cm <= distanceThreshold - 7 && cm > distanceThreshold - 14) {
+	  setColor(redColor*2,greenColor*2,blueColor*2);
+  }
+  if (cm <= distanceThreshold - 14 && cm > distanceThreshold - 21) {
+	  setColor(redColor*3,greenColor*3,blueColor*3);
+  }
+  if (cm <= distanceThreshold - 21 && cm > distanceThreshold - 28) {
 	  setColor(redColor*4,greenColor*4,blueColor*4);
   }
-  if (cm <= distanceThreshold - 40 && cm > distanceThreshold - 60) {
+  if (cm <= distanceThreshold - 28 && cm > distanceThreshold - 35) {
+	  setColor(redColor*5,greenColor*5,blueColor*5);
+  }
+  if (cm <= distanceThreshold - 35 && cm > distanceThreshold - 42) {
+	  setColor(redColor*6,greenColor*6,blueColor*6);
+  }
+  if (cm <= distanceThreshold - 42 && cm > distanceThreshold - 49) {
+	  setColor(redColor*6,greenColor*6,blueColor*6);
+  }
+  if (cm <= distanceThreshold - 49 && cm > distanceThreshold - 56) {
 	  setColor(redColor*7,greenColor*7,blueColor*7);
   }
-  if (cm <= distanceThreshold - 60 && cm > distanceThreshold - 80) {
+  if (cm <= distanceThreshold - 56 && cm > distanceThreshold - 63) {
+	  setColor(redColor*8,greenColor*8,blueColor*8);
+  }
+  if (cm <= distanceThreshold - 63 && cm > distanceThreshold - 70) {
+	  setColor(redColor*9,greenColor*9,blueColor*9);
+  }
+  if (cm <= distanceThreshold - 70 && cm > distanceThreshold - 77) {
 	  setColor(redColor*10,greenColor*10,blueColor*10);
   }
-  if (cm <= distanceThreshold - 80 && cm > distanceThreshold - 100) {
-	  setColor(redColor*13,greenColor*13,blueColor*13);
-  }
-  if (cm <= distanceThreshold - 100 && cm > distanceThreshold - 120) {
-	  setColor(redColor*16,greenColor*16,blueColor*16);
-  }
-  if (cm <= distanceThreshold - 120 && cm > distanceThreshold - 140) {
-	  setColor(redColor*19,greenColor*19,blueColor*19);
-  }
-  if (cm <= distanceThreshold - 140 && cm > distanceThreshold - 160) {
-	  setColor(redColor*22,greenColor*22,blueColor*22);
-  }
-  if (cm <= distanceThreshold - 160 && cm > distanceThreshold - 180) {
-	  setColor(redColor*25,greenColor*25,blueColor*25);
-  }
-  if (cm <= distanceThreshold - 180 && cm > distanceThreshold - 200) {
-	  setColor(redColor*28,greenColor*28,blueColor*28);
-  }
-  if (cm <= distanceThreshold - 200 && cm > distanceThreshold - 220) {
-	  setColor(redColor*31,greenColor*31,blueColor*31);
-  }
-  if (cm <= distanceThreshold - 220 && cm > distanceThreshold - 240) {
-	  setColor(redColor*34,greenColor*34,blueColor*34);
-  }
-  if (cm <= distanceThreshold - 240 && cm > distanceThreshold - 260) {
-	  setColor(redColor*37,greenColor*37,blueColor*37);
-  }
-  if (cm <= distanceThreshold - 260) {
-	  setColor(redColor*40,greenColor*40,blueColor*40);
+  //if (cm <= distanceThreshold - 220 && cm > distanceThreshold - 240) {
+	//  setColor(redColor*34,greenColor*34,blueColor*34);
+  //}
+  //if (cm <= distanceThreshold - 240 && cm > distanceThreshold - 260) {
+	//  setColor(redColor*37,greenColor*37,blueColor*37);
+  //}
+  if (cm <= distanceThreshold - 77) {
+	  setColor(redColor*11,greenColor*11,blueColor*11);
   }
   
   return cm;
