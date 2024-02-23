@@ -46,6 +46,10 @@ void setup() {
   lcd.setCursor(15,0);
   lcd.print("F");
   
+  // Initialize Ultrasonic Sensor
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+
   // Initialize serial and neopixel output.
   pinMode(2, OUTPUT);
   Serial.begin(9600);
@@ -57,14 +61,16 @@ void loop(){
 
   int reading = analogRead(sensorPin_temp);
 
-  // task neo pixel
-  if(currentTime - previousTimeNeoPixel > timeIntervalNeoPixel) {
+  int length;
+
+  // task receive temp input // task change color based on temperature
+  if(currentTime - previousTimetemp > timeInterval){
     
-    previousTimeNeoPixel = currentTime;
+  	previousTimetemp = currentTime;
     
-    show_color();
-    }
-  
+    temperatureF = temp_en(reading);
+  }
+
   // task ultrasonic input
   if(currentTime - previousTimesensor > timeInterval){
     
@@ -92,16 +98,16 @@ void loop(){
     blueColor = 5;
     }
     
-    dis_sensor(redColor,greenColor,blueColor);
+    length = dis_sensor(redColor,greenColor,blueColor);
   }
-  
-  // task receive temp input // task change color based on temperature
-  if(currentTime - previousTimetemp > timeInterval){
+
+  // task neo pixel
+  if(currentTime - previousTimeNeoPixel > timeIntervalNeoPixel) {
     
-  	previousTimetemp = currentTime;
+    previousTimeNeoPixel = currentTime;
     
-    temperatureF = temp_en(reading);
-  }
+    show_color();
+    }
   
   // task lcd show temp
   if(currentTime - previousTimelcd > timeInterval) {
@@ -118,9 +124,25 @@ void loop(){
     
     //print distance
     lcd.setCursor(0,1);
-    lcd.print("Distance=");
-    lcd.setCursor(9,1)
-    lcd.print(cm);
+    lcd.print("Distance = ");
+    lcd.setCursor(11,1);
+    lcd.print("     ");
+
+    if (length < 10){ // 1 digits
+      lcd.setCursor(13,1);
+      lcd.print(length);
+    }
+
+    if (length >= 10 && length < 100){  // 2 digits
+      lcd.setCursor(12,1);
+      lcd.print(length);
+    }
+
+    if (length >= 100){ // 3 digits
+      lcd.setCursor(11,1);
+      lcd.print(length);
+    }
+
     lcd.setCursor(14,1);
     lcd.print("cm");
   }
@@ -138,13 +160,7 @@ float temp_en(int reading){
   
   voltage /= 1024.0; 
   
-  Serial.print(voltage); 
-  Serial.println(" volts");
-  
   float temperatureC = (voltage - 0.5) * 100 ;
-  
-  Serial.print(temperatureC); 
-  Serial.println(" degrees C");
   
   float temperatureF = (temperatureC * 9.0 / 5.0) + 32.0;
   
@@ -180,14 +196,14 @@ void show_color(){
 
 int distanceThreshold = 0;
 
-int cm = 0;
+float cm = 0;
 
-int inches = 0;
+float inches = 0;
 
 // Ultrasonic sensor
 long readUltrasonicDistance(int triggerPin, int echoPin){
   
-  pinMode(triggerPin, OUTPUT);  // Clear the trigger
+  // Clear the trigger
   digitalWrite(triggerPin, LOW);
   delayMicroseconds(2);
   
@@ -195,19 +211,20 @@ long readUltrasonicDistance(int triggerPin, int echoPin){
   digitalWrite(triggerPin, HIGH);
   delayMicroseconds(10);
   digitalWrite(triggerPin, LOW);
-  pinMode(echoPin, INPUT);
   
   // Reads the echo pin, and returns the sound wave travel time in microseconds
-  return pulseIn(echoPin, HIGH);
+  float thisduration = pulseIn(echoPin, HIGH);
+  return thisduration;
 }
 
-void dis_sensor(int redColor,int greenColor,int blueColor)
+int dis_sensor(int redColor,int greenColor,int blueColor)
 {
   // set threshold distance to activate LEDs
-  distanceThreshold = 300;
+  distanceThreshold = 265;
   
   // measure the ping time in cm
-  cm = 0.0343 * readUltrasonicDistance(trigPin, echoPin);
+  long duration = readUltrasonicDistance(trigPin, echoPin);
+  cm = 0.0343 * duration / 2;
   
   // convert to inches by dividing by 2.54
   inches = (cm / 2.54);
@@ -264,5 +281,5 @@ void dis_sensor(int redColor,int greenColor,int blueColor)
 	  setColor(redColor*40,greenColor*40,blueColor*40);
   }
   
-  delay(100);
+  return cm;
 }
