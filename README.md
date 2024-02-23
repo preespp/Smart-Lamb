@@ -1,2 +1,4 @@
 # Smart-Lamp
 The project for Lutron Lighting Innovation Competition, Boston University
+
+This project's goal is to create a smart device that involves light using simple sensors, reused material for sustainability, and an automated system. Smart-Lamb will use the ultrasonic sensor to check the distance between the user and the device. The closer the user gets, the brighter the lamb is. It's the simulation of user detection to make it automatically turn on. Moreover, it has a temperature sensor (tmp36) that receives the temperature input, The information regarding temperature and distance will be displayed on LCD. The color of the light will be adjusted based on the environment to make sure that users are comfortable while accommodating. Light blue when it's hot, Warm white when it's warm, and light red when it's cold.
